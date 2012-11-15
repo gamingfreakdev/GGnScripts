@@ -3,7 +3,7 @@
 // @namespace   gamingfreak, Gruselgurke
 // @include     https://gazellegames.net/upload.php
 // @include     http://gazellegames.net/upload.php
-// @version     0.06
+// @version     0.10
 // @grant	GM_xmlhttpRequest
 // ==/UserScript==
 
@@ -16,7 +16,6 @@ elmLink.addEventListener("click", searchGOG, true);
 function helloWorld(event)
 {
 	var elem = event.currentTarget;
-	document.getElementById('title').value = elem.innerHTML;
 	event.preventDefault();	
 	GM_xmlhttpRequest({
 		method: "GET",
@@ -24,7 +23,14 @@ function helloWorld(event)
 		onload: function(r) {
 			var doc1 = document.createElement('div');
 			doc1.innerHTML = r.responseText;
-			
+
+			// Process the game title
+			meta = doc1.getElementsByTagName('meta');
+			for (var i = 0; i < meta.length; i++) {
+				if (meta[i].getAttribute('property') == "og:title") {
+					document.getElementById('title').value = meta[i].getAttribute('content');
+				}
+			}
 			// Process the year it was made
 			var year = doc1.getElementsByClassName('details')[0].getElementsByTagName('li')[3].innerHTML.toString().split(', ')[1];
 			document.getElementById('year').value = year;
@@ -171,7 +177,7 @@ function helloWorld(event)
 	});
 }
 
-function searchGOG() 
+function searchGOG()
 {
 	console.log("Called: SearchGOG");
 
@@ -191,14 +197,16 @@ function searchGOG()
 			{
 				// Parsing Results and cleaning them up
 				var htmlMatch = /"html":"(.*?)","search"/.exec(response)[1];
+				htmlMatch = htmlMatch.toString().replace(/&#163;/g, "£");
+				console.log(htmlMatch)
 				htmlMatch = htmlMatch.toString().replace(/\\/g, "");
 				htmlMatch = htmlMatch.toString().replace(/<\/a><a/g, "</a><br><a");
-				htmlMatch = htmlMatch.toString().replace(/<span class=\"nav_price\"><span>\$<\/span>\d*\.\d\d<\/span>/g, "");
+				htmlMatch = htmlMatch.toString().replace(/<span class=\"nav_price\"><span>[\$|£]<\/span>\d*\.\d\d<\/span>/g, "");
 				htmlMatch = htmlMatch.toString().replace(/data-pos=\"\d*\" /g, "");
 				htmlMatch = htmlMatch.toString().replace(/class=\".*?"/g, "");
 				htmlMatch = htmlMatch.replace(/href=\"/g, "href=\"http://www.gog.com");
 				console.log(htmlMatch);
-				
+
 				if (!document.getElementById('gogresults')) {
 					var results = document.createElement('tr');
 					results.innerHTML = "<td class='label'>GOG Results:</td><td id='gogresults'>" + htmlMatch + "</td>";
@@ -206,7 +214,7 @@ function searchGOG()
 				} else {
 					document.getElementById('gogresults').innerHTML = htmlMatch;
 				}
-				
+
 				for (var i = 0; i < document.getElementById('gogresults').getElementsByTagName('a').length; i++) {
 					var elmLink = document.getElementById('gogresults').getElementsByTagName('a')[i];
 					elmLink.addEventListener("click", helloWorld, true);
