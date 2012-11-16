@@ -131,7 +131,12 @@ function helloWorld(event)
 			// Game Generes !!!
 			var tempGenres = doc1.getElementsByClassName('details')[0].getElementsByTagName('li')[0].getElementsByTagName('a');
 			var genres = [];
-
+			
+			for (var i = 0; i < tempGenres.length; i++) 
+			{
+				genres[i] = tempGenres[i].innerHTML;	
+				console.log("Genre " + i + ": " + genres[i]);
+			}
 			
 			//check for genre combinations and reformat
 			if (genres.toString().indexOf("shooter") !== -1 && genres.toString().indexOf("fpp") !== -1){
