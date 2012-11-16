@@ -3,7 +3,7 @@
 // @namespace   gamingfreak, Gruselgurke
 // @include     https://gazellegames.net/upload.php
 // @include     http://gazellegames.net/upload.php
-// @version     0.10
+// @version     0.11
 // @grant	GM_xmlhttpRequest
 // ==/UserScript==
 
@@ -132,21 +132,172 @@ function helloWorld(event)
 			var tempGenres = doc1.getElementsByClassName('details')[0].getElementsByTagName('li')[0].getElementsByTagName('a');
 			var genres = [];
 
-			for (var i = 0; i < tempGenres.length; i++) 
-			{
-				genres[i] = tempGenres[i].innerHTML;	
-				console.log("Genre " + i + ": " + genres[i]);
-			}
-
-			for (var i = 0; i < genres.length; i++) {
-				if (!genres[i].toString().match(/fpp/))
-				{
-					if (document.getElementById('tags').value == "")
-						document.getElementById('tags').value = genres[i].toString();
-					else
-						document.getElementById('tags').value += ", " + genres[i].toString();
+			
+			//check for genre combinations and reformat
+			if (genres.toString().indexOf("shooter") !== -1 && genres.toString().indexOf("fpp") !== -1){
+				for (var i = 0; i < genres.length; i++) {
+					if (genres[i].match(/shooter/g)){
+					genres[i] = "first.person.shooter";
+					}
+					if (genres[i].match(/fpp/g)){
+					genres[i] = "";
+					}
 				}
 			}
+			
+			if (genres.toString().indexOf("shooter") !== -1 && genres.toString().indexOf("tpp") !== -1){
+				for (var i = 0; i < genres.length; i++) {
+					if (genres[i].match(/shooter/g)){
+					genres[i] = "third.person.shooter";
+					}
+					if (genres[i].match(/tpp/g)){
+					genres[i] = "";
+					}
+				}
+			}
+			
+			if (genres.toString().indexOf("real-time") !== -1 && genres.toString().indexOf("strategy") !== -1){
+				for (var i = 0; i < genres.length; i++) {
+					if (genres[i].match(/real\-time/g)){
+					genres[i] = "real.time.strategy";
+					}
+					if (genres[i].match(/strategy/g)){
+					genres[i] = "";
+					}
+				}
+			}	
+			
+			if (genres.toString().indexOf("real-time") !== -1 && genres.toString().indexOf("tactical") !== -1){
+				for (var i = 0; i < genres.length; i++) {
+					if (genres[i].match(/real\-time/g)){
+					genres[i] = "real.time.strategy";
+					}
+					if (genres[i].match(/strategy/g)){
+					genres[i] = "";
+					}
+				}
+			}	
+			
+			if (genres.toString().indexOf("turn-based") !== -1 && genres.toString().indexOf("strategy") !== -1){
+				for (var i = 0; i < genres.length; i++) {
+					if (genres[i].match(/turn\-based/g)){
+					genres[i] = "turn.based.strategy";
+					}
+					if (genres[i].match(/strategy/g)){
+					genres[i] = "";
+					}
+				}
+			}	
+			
+			if (genres.toString().indexOf("modern") !== -1 && genres.toString().indexOf("shooter") !== -1){
+				for (var i = 0; i < genres.length; i++) {
+					if (genres[i].match(/modern/g)){
+					genres[i] = "modern.military.shooter";
+					}
+					if (genres[i].match(/shooter/g)){
+					genres[i] = "";
+					}
+				}
+			}				
+			
+			if (genres.toString().indexOf("sci-fi") !== -1 && genres.toString().indexOf("simulation") !== -1){
+				for (var i = 0; i < genres.length; i++) {
+					if (genres[i].match(/sci-fi/g)){
+					genres[i] = "space.simulation";
+					}
+					if (genres[i].match(/simulation/g)){
+					genres[i] = "";
+					}
+				}
+			}	
+			//check for common genere matches and reformat
+			for (var i = 0; i < genres.length; i++) {
+			
+					switch (genres[i])
+				{
+				case "sci-fi":
+					genres[i] = "science.fiction";
+					break;
+				case "rpg":
+					genres[i] = "role.playing.game";
+					break;
+				case "detective-mystery":
+					genres[i] = "crime, mystery";
+					break;	
+				case "detective":
+					genres[i] = "crime";
+					break;
+				case "fps":
+					genres[i] = "first.person.shooter";
+					break;
+				case "building":
+					genres[i] = "construction.simulation";
+					break;		
+				case "virtual-life":
+					genres[i] = "life.simulation";
+					break;	
+				case "combat":
+					genres[i] = "action";
+					break;	
+				case "rally":
+					genres[i] = "racing";
+					break;
+				case "economic":
+					genres[i] = "simulation";
+					break;
+				case "managerial":
+					genres[i] = "simulation";
+					break;
+				case "chess":
+					genres[i] = "strategy";
+					break;
+				case "off-road":
+					genres[i] = "racing";	
+					break;
+				case "soccer":
+					genres[i] = "sports";	
+					break;	
+				case "tactical":
+					genres[i] = "strategy";	
+					break;			
+				case "modern":
+					genres[i] = "";	
+					break;	
+				case "fpp":
+					genres[i] = "";	
+					break;	
+				case "tpp":
+					genres[i] = "";	
+					break;		
+				case "real-time":
+					genres[i] = "";	
+					break;		
+				case "historical":
+					genres[i] = "";	
+					break;						
+				default:
+					break;
+				}
+				
+				//replace - with .
+				if (genres[i].toString().match(/\-/g)){
+					var makeDot = genres[i].toString().replace(/\-/g, ".");
+					genres[i] = makeDot
+				}
+				if (genres[i] !== ""){
+				//check for dupes
+					if (document.getElementById('tags').value.toString().indexOf(genres[i].toString()) == -1){
+					//add tags to the tag field
+						if (document.getElementById('tags').value == ""){
+							document.getElementById('tags').value = genres[i].toString();
+							}
+						else {
+							document.getElementById('tags').value += ", " + genres[i].toString();
+							}
+						}		
+					}
+				}
+
 			
 			//Get YouTube Trailer if it exists
 			if (doc1.getElementsByTagName('iframe')[0]){
@@ -164,7 +315,7 @@ function helloWorld(event)
 			//Set Release Type
 			document.getElementById('miscellaneous').value = "Home Rip";
 			//Set Release Description
-			document.getElementById('release_desc').value += "1. Install the .exe\n2. Done!";
+			document.getElementById('release_desc').value += "1. Install the "+gameTitle.replace(/\:/g, "")+".exe\n2. Done!";
 			//Set Edition
 			document.getElementById('remaster').checked=false;
 			document.getElementById('remaster').click();
@@ -204,6 +355,11 @@ function searchGOG()
 				htmlMatch = htmlMatch.toString().replace(/<span class=\"nav_price\"><span>[\$|£]<\/span>\d*\.\d\d<\/span>/g, "");
 				htmlMatch = htmlMatch.toString().replace(/data-pos=\"\d*\" /g, "");
 				htmlMatch = htmlMatch.toString().replace(/class=\".*?"/g, "");
+				htmlMatch = htmlMatch.toString().replace(/ u2122/g, "");
+				htmlMatch = htmlMatch.toString().replace(/ u00ae/g, "");
+				htmlMatch = htmlMatch.toString().replace(/u2122/g, "");
+				htmlMatch = htmlMatch.toString().replace(/u00ae/g, "");
+				htmlMatch = htmlMatch.toString().replace(/<span ><span>&euro;<\/span>\d*\.\d*<\/span>/g, "");
 				htmlMatch = htmlMatch.replace(/href=\"/g, "href=\"http://www.gog.com");
 				console.log(htmlMatch);
 
