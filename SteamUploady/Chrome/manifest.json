@@ -1,0 +1,27 @@
+{
+  "name": "GGn Steam Upload Asisstant",
+  "description": "GGn Uploader Page, and it helps you to fill in the information",
+  "version": "0.43",
+  "permissions": [
+	"http://store.steampowered.com/app/*",
+	"http://imgur.com/*",
+	"http://search.ign.com/product?query=*",
+	"http://dl.dropbox.com/u/20017678/*"
+  ],  
+  "background_page" : "background.html",
+  "content_scripts": [
+    {
+		"matches": [
+			"http://gazellegames.net/upload.php*",
+			"https://www.gazellegames.net/upload.php*",
+			"http://www.gazellegames.net/upload.php*",
+			"https://gazellegames.net/upload.php*"
+		],
+		"js": ["myscript.js"]
+    }
+  ],
+  "icons": {
+		"128": "favicon.ico"
+  }
+
+}
