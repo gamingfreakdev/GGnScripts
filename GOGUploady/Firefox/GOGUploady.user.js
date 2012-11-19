@@ -163,10 +163,10 @@ function helloWorld(event)
 			
 			if (genres.toString().indexOf("real-time") !== -1 && genres.toString().indexOf("strategy") !== -1){
 				for (var i = 0; i < genres.length; i++) {
-					if (genres[i].match(/real\-time/g)){
+					if (genres[i].match(/strategy/g)){
 					genres[i] = "real.time.strategy";
 					}
-					if (genres[i].match(/strategy/g)){
+					if (genres[i].match(/real\-time/g)){
 					genres[i] = "";
 					}
 				}
@@ -174,10 +174,10 @@ function helloWorld(event)
 			
 			if (genres.toString().indexOf("real-time") !== -1 && genres.toString().indexOf("tactical") !== -1){
 				for (var i = 0; i < genres.length; i++) {
-					if (genres[i].match(/real\-time/g)){
+					if (genres[i].match(/strategy/g)){
 					genres[i] = "real.time.strategy";
 					}
-					if (genres[i].match(/strategy/g)){
+					if (genres[i].match(/real\-time/g)){
 					genres[i] = "";
 					}
 				}
@@ -185,10 +185,10 @@ function helloWorld(event)
 			
 			if (genres.toString().indexOf("turn-based") !== -1 && genres.toString().indexOf("strategy") !== -1){
 				for (var i = 0; i < genres.length; i++) {
-					if (genres[i].match(/turn\-based/g)){
+					if (genres[i].match(/strategy/g)){
 					genres[i] = "turn.based.strategy";
 					}
-					if (genres[i].match(/strategy/g)){
+					if (genres[i].match(/turn\-based/g)){
 					genres[i] = "";
 					}
 				}
