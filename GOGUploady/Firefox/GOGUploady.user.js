@@ -28,8 +28,13 @@ function helloWorld(event)
 			meta = doc1.getElementsByTagName('meta');
 			for (var i = 0; i < meta.length; i++) {
 				if (meta[i].getAttribute('property') == "og:title") {
-					document.getElementById('title').value = meta[i].getAttribute('content');
 					var gameTitle = meta[i].getAttribute('content');
+					if (gameTitle.match(/, The/g)){
+						gameTitle = gameTitle.replace(/, The/g, "");
+						gameTitle = "The " + gameTitle;
+					}
+					document.getElementById('title').value = gameTitle;
+					
 				}
 			}
 			// Process the year it was made
