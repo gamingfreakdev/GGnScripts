@@ -3,17 +3,15 @@
 // @namespace   gamingfreak, Gruselgurke
 // @include     https://gazellegames.net/upload.php
 // @include     http://gazellegames.net/upload.php
-// @version     0.11
-// @grant	GM_xmlhttpRequest
+// @version     0.12
+// @downloadURL https://github.com/gamingfreakdev/GGnScripts/raw/master/GOGUploady/Firefox/GOGUploady.user.js
+// @grant       GM_xmlhttpRequest
 // ==/UserScript==
 
-var addElementTo = document.getElementById('uploady').parentNode;
-addElementTo.innerHTML += " <input id='goguploady' type='button' value='GOG Uploady'/>";
+var gogAddElementTo = document.getElementById('uploady').parentNode;
 
-var elmLink = document.getElementById('goguploady');
-elmLink.addEventListener("click", searchGOG, true);
 
-function helloWorld(event)
+function GOGUploady(event)
 {
 	var elem = event.currentTarget;
 	event.preventDefault();	
@@ -34,7 +32,6 @@ function helloWorld(event)
 						gameTitle = "The " + gameTitle;
 					}
 					document.getElementById('title').value = gameTitle;
-					
 				}
 			}
 			// Process the year it was made
@@ -348,11 +345,15 @@ function searchGOG()
 	var date = new Date();
 	var time = date.getTime();
 	console.log("Time: " + time);
+	console.log("URL: http://www.gog.com/catalogue/ajax/?a=topMenuSearch&s="+title.replace(/ /g, "+")+"&t=" + time);
 	GM_xmlhttpRequest({
 		method: "GET",
 		url: "http://www.gog.com/catalogue/ajax/?a=topMenuSearch&s="+title.replace(/ /g, "+")+"&t=" + time,
 		onload: function(r) {
 			var response = r.responseText;
+			console.log("R: " + r);
+			console.log("Text: " + r.responseText)
+			console.log("Response: " + response)
 			var matches = /"count":(\d*?),/.exec(response)[1];
 			console.log("Number of Matches: " + matches);
 			if (parseInt(matches) > 0)
@@ -377,16 +378,28 @@ function searchGOG()
 				if (!document.getElementById('gogresults')) {
 					var results = document.createElement('tr');
 					results.innerHTML = "<td class='label'>GOG Results:</td><td id='gogresults'>" + htmlMatch + "</td>";
-					addElementTo.parentNode.parentNode.insertBefore(results, addElementTo.parentNode.nextSibling);
+					gogAddElementTo.parentNode.parentNode.insertBefore(results, gogAddElementTo.parentNode.nextSibling);
 				} else {
 					document.getElementById('gogresults').innerHTML = htmlMatch;
 				}
 
 				for (var i = 0; i < document.getElementById('gogresults').getElementsByTagName('a').length; i++) {
 					var elmLink = document.getElementById('gogresults').getElementsByTagName('a')[i];
-					elmLink.addEventListener("click", helloWorld, true);
+					elmLink.addEventListener("click", GOGUploady, true);
 				}
 			}
 		}
 	});
 }
+
+function setup() {
+	var button = document.createElement('input');
+	button.setAttribute("type", "button")
+	button.setAttribute('id', 'goguploady')
+	button.setAttribute('value','GOG Uploady')
+	button.addEventListener("click", searchGOG, true);
+	
+	gogAddElementTo.appendChild(button)
+}
+
+setup()
