@@ -6,7 +6,9 @@
 // @include	    https://gazellegames.net*
 // @include	    http://www.gazellegames.net*
 // @include	    http://gazellegames.net*
-// @version	1.6
+// @downloadURL https://github.com/gamingfreakdev/GGnScripts/raw/master/CommentsNotifier/GGnUploaderCommentsNotify.user.js
+// @grant       GM_xmlhttpRequest
+// @version	1.61
 // ==/UserScript==
 
 function main() {
